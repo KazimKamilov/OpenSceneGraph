@@ -40,7 +40,7 @@ namespace osgUtil
 // custom CompileData elements
 // pruneOldRequestsAndCheckIfEmpty()
 // Use? :
-//                     #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+//                     #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
 //                        GLint p;
 //                        glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_RESIDENT, &p);
 //                    #endif
@@ -81,16 +81,6 @@ void StateToCompile::apply(osg::Drawable& drawable)
     {
         if (drawable.getDataVariance()!=osg::Object::STATIC)
         {
-            if (_mode&GLObjectsVisitor::SWITCH_OFF_DISPLAY_LISTS)
-            {
-                drawable.setUseDisplayList(false);
-            }
-
-            if (_mode&GLObjectsVisitor::SWITCH_ON_DISPLAY_LISTS)
-            {
-                drawable.setUseDisplayList(true);
-            }
-
             if (_mode&GLObjectsVisitor::SWITCH_ON_VERTEX_BUFFER_OBJECTS)
             {
                 drawable.setUseVertexBufferObjects(true);
@@ -102,8 +92,7 @@ void StateToCompile::apply(osg::Drawable& drawable)
             }
         }
 
-        if (_mode&GLObjectsVisitor::COMPILE_DISPLAY_LISTS &&
-            (drawable.getUseDisplayList() || drawable.getUseVertexBufferObjects()))
+        if (drawable.getUseVertexBufferObjects())
         {
             _drawables.insert(&drawable);
         }

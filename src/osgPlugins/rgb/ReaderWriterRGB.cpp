@@ -22,7 +22,7 @@
 #  define SEEK_SET 0
 #endif
 
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     #define GL_BITMAP               0x1A00
     #define GL_RED                  0x1903
     #define GL_GREEN                0x1904

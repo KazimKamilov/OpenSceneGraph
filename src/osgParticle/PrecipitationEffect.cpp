@@ -701,7 +701,7 @@ void PrecipitationEffect::setUpGeometries(unsigned int numParticles)
         osg::PointSprite *sprite = new osg::PointSprite();
         _pointStateSet->setTextureAttributeAndModes(0, sprite, osg::StateAttribute::ON);
 
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE)
             _pointStateSet->setMode(GL_VERTEX_PROGRAM_POINT_SIZE, osg::StateAttribute::ON);
         #else
             OSG_NOTICE<<"Warning: ParticleEffect::setUpGeometries(..) not fully implemented."<<std::endl;
@@ -859,7 +859,6 @@ PrecipitationEffect::PrecipitationDrawable::PrecipitationDrawable():
     _drawType(GL_QUADS),
     _numberOfVertices(0)
 {
-    setSupportsDisplayList(false);
 }
 
 PrecipitationEffect::PrecipitationDrawable::PrecipitationDrawable(const PrecipitationDrawable& copy, const osg::CopyOp& copyop):
@@ -892,82 +891,4 @@ void PrecipitationEffect::PrecipitationDrawable::releaseGLObjects(osg::State* st
 
 void PrecipitationEffect::PrecipitationDrawable::drawImplementation(osg::RenderInfo& renderInfo) const
 {
-#if defined(OSG_GL_MATRICES_AVAILABLE)
-
-if (!_geometry) return;
-
-
-    const osg::GLExtensions* extensions = renderInfo.getState()->get<osg::GLExtensions>();
-
-    // save OpenGL matrices
-    glPushMatrix();
-
-    if (_requiresPreviousMatrix)
-    {
-        renderInfo.getState()->setActiveTextureUnit(0);
-        glMatrixMode( GL_TEXTURE );
-        glPushMatrix();
-    }
-
-    typedef std::vector<const CellMatrixMap::value_type*> DepthMatrixStartTimeVector;
-    DepthMatrixStartTimeVector orderedEntries;
-    orderedEntries.reserve(_currentCellMatrixMap.size());
-
-    for(CellMatrixMap::const_iterator citr = _currentCellMatrixMap.begin();
-        citr != _currentCellMatrixMap.end();
-        ++citr)
-    {
-        orderedEntries.push_back(&(*citr));
-    }
-
-    std::sort(orderedEntries.begin(),orderedEntries.end(),LessFunctor());
-
-    for(DepthMatrixStartTimeVector::reverse_iterator itr = orderedEntries.rbegin();
-        itr != orderedEntries.rend();
-        ++itr)
-    {
-        extensions->glMultiTexCoord1f(GL_TEXTURE0+1, (*itr)->second.startTime);
-
-        // load cells current modelview matrix
-        if (_requiresPreviousMatrix)
-        {
-            glMatrixMode( GL_MODELVIEW );
-            glLoadMatrix((*itr)->second.modelview.ptr());
-
-            CellMatrixMap::const_iterator pitr = _previousCellMatrixMap.find((*itr)->first);
-            if (pitr != _previousCellMatrixMap.end())
-            {
-                // load previous frame modelview matrix for motion blurr effect
-                glMatrixMode( GL_TEXTURE );
-                glLoadMatrix(pitr->second.modelview.ptr());
-            }
-            else
-            {
-                // use current modelview matrix as "previous" frame value, cancelling motion blurr effect
-                glMatrixMode( GL_TEXTURE );
-                glLoadMatrix((*itr)->second.modelview.ptr());
-            }
-        }
-        else
-        {
-            glLoadMatrix((*itr)->second.modelview.ptr());
-        }
-
-        _geometry->draw(renderInfo);
-
-        unsigned int numVertices = osg::minimum(_geometry->getVertexArray()->getNumElements(), _numberOfVertices);
-        glDrawArrays(_drawType, 0, numVertices);
-    }
-
-    // restore OpenGL matrices
-    if (_requiresPreviousMatrix)
-    {
-        glPopMatrix();
-        glMatrixMode( GL_MODELVIEW );
-    }
-
-    glPopMatrix();
-#else
-    OSG_NOTICE<<"Warning: ParticleEffect::drawImplementation(..) not fully implemented."<<std::endl;
-#endif
 }

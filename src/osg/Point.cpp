@@ -81,19 +81,4 @@ void Point::setMaxSize(float maxSize)
 
 void Point::apply(State& state) const
 {
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-    glPointSize(_size);
-
-    const GLExtensions* extensions = state.get<GLExtensions>();
-
-    if (!extensions->isPointParametersSupported)
-        return;
-
-    extensions->glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, (const GLfloat*)&_distanceAttenuation);
-    extensions->glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, _fadeThresholdSize);
-    extensions->glPointParameterf(GL_POINT_SIZE_MIN, _minSize);
-    extensions->glPointParameterf(GL_POINT_SIZE_MAX, _maxSize);
-#else
-    OSG_NOTICE<<"Warning: Point::apply(State&) - not supported."<<std::endl;
-#endif
 }

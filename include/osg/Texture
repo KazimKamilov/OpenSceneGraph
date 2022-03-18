@@ -66,6 +66,11 @@
     #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT  0x8C4D
     #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT  0x8C4E
     #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT  0x8C4F
+#else
+    #define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT        0x8C4C
+    #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT  0x8C4D
+    #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT  0x8C4E
+    #define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT  0x8C4F
 #endif
 
 #ifndef GL_EXT_texture_compression_rgtc
@@ -449,14 +454,6 @@ class OSG_EXPORT Texture : public osg::TextureAttribute
         virtual bool isTextureAttribute() const { return true; }
 
         virtual GLenum getTextureTarget() const = 0;
-
-        #ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-        virtual bool getModeUsage(StateAttribute::ModeUsage& usage) const
-        {
-                usage.usesTextureMode(getTextureTarget());
-            return true;
-        }
-        #endif
 
         virtual int getTextureWidth() const { return 0; }
         virtual int getTextureHeight() const { return 0; }

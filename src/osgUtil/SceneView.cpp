@@ -198,30 +198,7 @@ void SceneView::setDefaults(unsigned int options)
     // clear the global StateSet (main Camera's StateSet) if required
     if ((options & CLEAR_GLOBAL_STATESET)) _globalStateSet->clear();
 
-    if ((options & HEADLIGHT) || (options & SKY_LIGHT))
-    {
-        #if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-            _lightingMode=(options&HEADLIGHT) ? HEADLIGHT : SKY_LIGHT;
-            _light = new osg::Light;
-            _light->setLightNum(0);
-            _light->setAmbient(Vec4(0.00f,0.0f,0.00f,1.0f));
-            _light->setDiffuse(Vec4(0.8f,0.8f,0.8f,1.0f));
-            _light->setSpecular(Vec4(1.0f,1.0f,1.0f,1.0f));
-
-
-            _globalStateSet->setAssociatedModes(_light.get(),osg::StateAttribute::ON);
-
-            // enable lighting by default.
-            _globalStateSet->setMode(GL_LIGHTING, osg::StateAttribute::ON);
-        #endif
-
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-            osg::LightModel* lightmodel = new osg::LightModel;
-            lightmodel->setAmbientIntensity(osg::Vec4(0.1f,0.1f,0.1f,1.0f));
-            _globalStateSet->setAttributeAndModes(lightmodel, osg::StateAttribute::ON);
-        #endif
-    }
-    else
+    if (!((options & HEADLIGHT) || (options & SKY_LIGHT)))
     {
         _lightingMode = NO_SCENEVIEW_LIGHT;
     }
@@ -234,8 +211,7 @@ void SceneView::setDefaults(unsigned int options)
 
     if (options & COMPILE_GLOBJECTS_AT_INIT)
     {
-        GLObjectsVisitor::Mode  dlvMode = GLObjectsVisitor::COMPILE_DISPLAY_LISTS |
-                                          GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES |
+        GLObjectsVisitor::Mode  dlvMode = GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES |
                                           GLObjectsVisitor::CHECK_BLACK_LISTED_MODES;
 
     #ifdef __sgi
@@ -263,13 +239,6 @@ void SceneView::setDefaults(unsigned int options)
     if ((options&APPLY_GLOBAL_DEFAULTS))
     {
         _globalStateSet->setGlobalDefaults();
-
-        #if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-            // set up an texture environment by default to speed up blending operations.
-            osg::TexEnv* texenv = new osg::TexEnv;
-            texenv->setMode(osg::TexEnv::MODULATE);
-            _globalStateSet->setTextureAttributeAndModes(0,texenv, osg::StateAttribute::ON);
-        #endif
 
         _camera->setClearColor(osg::Vec4(0.2f, 0.2f, 0.4f, 1.0f));
     }
@@ -596,18 +565,6 @@ void SceneView::setLightingMode(LightingMode mode)
     }
 
     _lightingMode = mode;
-
-    if (_lightingMode!=NO_SCENEVIEW_LIGHT)
-    {
-        #if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-            // add GL_LIGHTING mode
-            stateSetToModify->setMode(GL_LIGHTING, osg::StateAttribute::ON);
-            if (_light.valid())
-            {
-                stateSetToModify->setAssociatedModes(_light.get(), osg::StateAttribute::ON);
-            }
-        #endif
-    }
 }
 
 void SceneView::inheritCullSettings(const osg::CullSettings& settings, unsigned int inheritanceMask)
@@ -858,22 +815,6 @@ bool SceneView::cullStage(const osg::Matrixd& projection,const osg::Matrixd& mod
 #if 1
     renderStage->setCamera(_camera.get());
 #endif
-
-    #if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-        switch(_lightingMode)
-        {
-        case(HEADLIGHT):
-            if (_light.valid()) renderStage->addPositionedAttribute(NULL,_light.get());
-            else OSG_WARN<<"Warning: no osg::Light attached to osgUtil::SceneView to provide head light.*/"<<std::endl;
-            break;
-        case(SKY_LIGHT):
-            if (_light.valid()) renderStage->addPositionedAttribute(mv.get(),_light.get());
-            else OSG_WARN<<"Warning: no osg::Light attached to osgUtil::SceneView to provide sky light.*/"<<std::endl;
-            break;
-        default:
-            break;
-        }
-    #endif
 
     if (_globalStateSet.valid()) cullVisitor->pushStateSet(_globalStateSet.get());
     if (_secondaryStateSet.valid()) cullVisitor->pushStateSet(_secondaryStateSet.get());
@@ -1292,7 +1233,7 @@ void SceneView::draw()
         case(osg::DisplaySettings::HORIZONTAL_INTERLACE):
         case(osg::DisplaySettings::CHECKERBOARD):
             {
-            #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+            #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
                 if( 0 == ( _camera->getInheritanceMask() & DRAW_BUFFER) )
                 {
                     _renderStageLeft->setDrawBuffer(_camera->getDrawBuffer());

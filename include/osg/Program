@@ -222,9 +222,6 @@ class OSG_EXPORT Program : public osg::StateAttribute
         const FragDataBindingList& getFragDataBindingList() const { return _fragDataBindingList; }
         const UniformBlockBindingList& getUniformBlockBindingList() const { return _uniformBlockBindingList; }
 
-        /** Return true if this Program represents "fixed-functionality" rendering */
-        bool isFixedFunction() const;
-
         /** Query InfoLog from a glProgram */
         bool getGlProgramInfoLog(unsigned int contextID, std::string& log) const;
 

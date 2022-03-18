@@ -844,18 +844,15 @@ class OSGUTIL_EXPORT Optimizer
 
                 BufferObjectVisitor(bool changeVBO, bool valueVBO,
                                     bool changeVertexArrayObject, bool valueVertexArrayObject,
-                                    bool changeDisplayList, bool valueDisplayList,
                                     Optimizer* optimizer=0):
                         BaseOptimizerVisitor(optimizer, BUFFER_OBJECT_SETTINGS),
                         _changeVertexBufferObject(changeVBO), _valueVertexBufferObject(valueVBO),
-                        _changeVertexArrayObject(changeVertexArrayObject), _valueVertexArrayObject(valueVertexArrayObject),
-                        _changeDisplayList(changeDisplayList), _valueDisplayList(valueDisplayList) {}
+                        _changeVertexArrayObject(changeVertexArrayObject), _valueVertexArrayObject(valueVertexArrayObject) {}
 
                 virtual void apply(osg::Geometry& geometry);
 
                 bool _changeVertexBufferObject, _valueVertexBufferObject;
                 bool _changeVertexArrayObject, _valueVertexArrayObject;
-                bool _changeDisplayList, _valueDisplayList;
 
         };
 };

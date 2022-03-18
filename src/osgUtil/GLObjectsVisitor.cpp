@@ -66,16 +66,6 @@ void GLObjectsVisitor::apply(osg::Drawable& drawable)
         apply(*(drawable.getStateSet()));
     }
 
-    if (_mode&SWITCH_OFF_DISPLAY_LISTS)
-    {
-        drawable.setUseDisplayList(false);
-    }
-
-    if (_mode&SWITCH_ON_DISPLAY_LISTS)
-    {
-        drawable.setUseDisplayList(true);
-    }
-
     if (_mode&SWITCH_ON_VERTEX_BUFFER_OBJECTS)
     {
         drawable.setUseVertexBufferObjects(true);
@@ -86,19 +76,13 @@ void GLObjectsVisitor::apply(osg::Drawable& drawable)
         drawable.setUseVertexBufferObjects(false);
     }
 
-    if (_mode&COMPILE_DISPLAY_LISTS && _renderInfo.getState() &&
-        (drawable.getUseDisplayList() || drawable.getUseVertexBufferObjects()))
+    if (_renderInfo.getState() &&
+        (drawable.getUseVertexBufferObjects()))
     {
 
         drawable.compileGLObjects(_renderInfo);
 
         if (_checkGLErrors==osg::State::ONCE_PER_ATTRIBUTE) _renderInfo.getState()->checkGLErrors("after drawable.compileGLObjects() call in GLObjectsVisitor::apply(osg::Drawable& drawable)  ");
-    }
-
-
-    if (_mode&RELEASE_DISPLAY_LISTS)
-    {
-        drawable.releaseGLObjects(_renderInfo.getState());
     }
 }
 
@@ -118,11 +102,9 @@ void GLObjectsVisitor::apply(osg::StateSet& stateset)
         if (_checkGLErrors==osg::State::ONCE_PER_ATTRIBUTE) _renderInfo.getState()->checkGLErrors("after stateset.compileGLObjects in GLObjectsVisitor::apply(osg::StateSet& stateset)");
 
         osg::Program* program = dynamic_cast<osg::Program*>(stateset.getAttribute(osg::StateAttribute::PROGRAM));
-        if (program) {
-            if( program->isFixedFunction() )
-                _lastCompiledProgram = NULL; // It does not make sense to apply uniforms on fixed pipe
-            else
-                _lastCompiledProgram = program;
+        if (program)
+        {
+            _lastCompiledProgram = program;
         }
 
         if (_lastCompiledProgram.valid() && !stateset.getUniformList().empty())

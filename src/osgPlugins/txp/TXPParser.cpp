@@ -933,7 +933,6 @@ void* lightRead::Parse(trpgToken /*tok*/,trpgReadBuffer &buf)
         geom->setColorArray(colors);
         geom->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
 
-        geom->setUseDisplayList(false);
         geom->setStateSet(dla.fallback.get());
 
         osg::Geode* g = new osg::Geode;
@@ -1432,12 +1431,6 @@ void* geomRead::Parse(trpgToken /*tok*/,trpgReadBuffer &buf)
 
     if (geometry.valid() && top)
     {
-
-       //modified by Brad Anderegg on May-27-08
-       //using display lists actually increases our framerate by
-       //a fair amount, on certain laptops it increased by as much as 1000%
-       geometry->setUseDisplayList(true);
-
         geometry->setVertexArray(vertices.get());
         if (normals.valid())
         {
@@ -1499,8 +1492,6 @@ void* geomRead::Parse(trpgToken /*tok*/,trpgReadBuffer &buf)
             osg::ref_ptr<osg::Billboard> billboard = new osg::Billboard;
             billboard->setAxis(osg::Vec3(0.0f,0.0,1.0f) );
             billboard->setNormal(osg::Vec3(0.0f,-1.0,0.0f));
-
-            geometry->setUseDisplayList(true);
 
             switch (info.mode)
             {

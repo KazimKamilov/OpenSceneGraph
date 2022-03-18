@@ -148,60 +148,6 @@ void TexGen::setPlanesFromMatrix(const Matrixd& matrix)
 
 void TexGen::apply(State& state) const
 {
-#if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE) && !defined(OSG_GLES1_AVAILABLE)
-    if (state.getUseStateAttributeFixedFunction())
-    {
-        if (_mode == OBJECT_LINEAR || _mode == EYE_LINEAR)
-        {
-            GLenum glmode = _mode == OBJECT_LINEAR ? GL_OBJECT_PLANE : GL_EYE_PLANE;
-
-            if (sizeof((_plane_s->getValue())[0])==sizeof(GLfloat))
-            {
-                glTexGenfv(GL_S, glmode, (const GLfloat*)_plane_s->getValue().ptr());
-                glTexGenfv(GL_T, glmode, (const GLfloat*)_plane_t->getValue().ptr());
-                glTexGenfv(GL_R, glmode, (const GLfloat*)_plane_r->getValue().ptr());
-                glTexGenfv(GL_Q, glmode, (const GLfloat*)_plane_q->getValue().ptr());
-            }
-            else
-            {
-                glTexGendv(GL_S, glmode, (const GLdouble*)_plane_s->getValue().ptr());
-                glTexGendv(GL_T, glmode, (const GLdouble*)_plane_t->getValue().ptr());
-                glTexGendv(GL_R, glmode, (const GLdouble*)_plane_r->getValue().ptr());
-                glTexGendv(GL_Q, glmode, (const GLdouble*)_plane_q->getValue().ptr());
-            }
-
-            glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_R, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_Q, GL_TEXTURE_GEN_MODE, _mode );
-
-        }
-        else if (_mode == NORMAL_MAP)
-        {
-            glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_R, GL_TEXTURE_GEN_MODE, _mode );
-    //      glTexGeni( GL_Q, GL_TEXTURE_GEN_MODE, _mode );
-        }
-        else if (_mode == REFLECTION_MAP)
-        {
-            glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_R, GL_TEXTURE_GEN_MODE, _mode );
-    //      glTexGeni( GL_Q, GL_TEXTURE_GEN_MODE, _mode );
-        }
-        else // SPHERE_MAP
-        {
-            // Also don't set the mode of GL_R & GL_Q as these will generate
-            // GL_INVALID_ENUM (See OpenGL Reference Guide, glTexGEn.)
-
-            glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, _mode );
-            glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, _mode );
-        }
-    }
-
-    if (state.getUseStateAttributeShaders())
-#endif
     {
         state.applyShaderCompositionDefines(_defineList);
 
@@ -223,5 +169,4 @@ void TexGen::apply(State& state) const
                 break;
         }
     }
-
 }

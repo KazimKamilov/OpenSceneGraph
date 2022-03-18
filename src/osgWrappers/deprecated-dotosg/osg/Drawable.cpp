@@ -90,38 +90,6 @@ bool Drawable_readLocalData(Object& obj, Input& fr)
         iteratorAdvanced = true;
     }
 
-    if (fr[0].matchWord("supportsDisplayList"))
-    {
-        if (fr[1].matchWord("TRUE"))
-        {
-            drawable.setSupportsDisplayList(true);
-            fr+=2;
-            iteratorAdvanced = true;
-        }
-        else if (fr[1].matchWord("FALSE"))
-        {
-            drawable.setSupportsDisplayList(false);
-            fr+=2;
-            iteratorAdvanced = true;
-        }
-    }
-
-    if (fr[0].matchWord("useDisplayList"))
-    {
-        if (fr[1].matchWord("TRUE"))
-        {
-            drawable.setUseDisplayList(true);
-            fr+=2;
-            iteratorAdvanced = true;
-        }
-        else if (fr[1].matchWord("FALSE"))
-        {
-            drawable.setUseDisplayList(false);
-            fr+=2;
-            iteratorAdvanced = true;
-        }
-    }
-
     if (fr[0].matchWord("useVertexBufferObjects"))
     {
         if (fr[1].matchWord("TRUE"))
@@ -188,18 +156,6 @@ bool Drawable_writeLocalData(const Object& obj, Output& fw)
     {
         fw.writeObject(*drawable.getComputeBoundingBoxCallback());
     }
-
-
-    if (!drawable.getSupportsDisplayList())
-    {
-        fw.indent()<<"supportsDisplayList ";
-        if (drawable.getSupportsDisplayList()) fw << "TRUE" << std::endl;
-        else fw << "FALSE" << std::endl;
-    }
-
-    fw.indent()<<"useDisplayList ";
-    if (drawable.getUseDisplayList()) fw << "TRUE" << std::endl;
-    else fw << "FALSE" << std::endl;
 
     fw.indent()<<"useVertexBufferObjects ";
     if (drawable.getUseVertexBufferObjects()) fw << "TRUE" << std::endl;

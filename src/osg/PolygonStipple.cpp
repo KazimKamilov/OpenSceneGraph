@@ -81,10 +81,5 @@ void PolygonStipple::setMask(const GLubyte* givenMask)
 
 void PolygonStipple::apply(State&) const
 {
-#ifdef OSG_GL1_AVAILABLE
-    glPolygonStipple(_mask);
-#else
-    OSG_NOTICE<<"Warning: PolygonStipple::apply(State&) - not supported."<<std::endl;
-#endif
 }
 

@@ -34,12 +34,13 @@
 #include <osg/TextureRectangle>
 #include <osg/Texture2DArray>
 
+#include <osg/Transform>
+
 #include <set>
 #include <algorithm>
 #include <sstream>
 
 using namespace osg;
-
 
 #if (!defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE))
     #define GLSL_VERSION_STR "330 core"
@@ -202,6 +203,10 @@ StateSet::StateSet():
     _numChildrenRequiringEventTraversal = 0;
 
     setRenderBinToInherit();
+
+#ifdef OSG_GL3_AVAILABLE
+    setMode(GL_NORMALIZE, osg::StateAttribute::OFF);
+#endif
 }
 
 StateSet::StateSet(const StateSet& rhs,const CopyOp& copyop):Object(rhs,copyop),
@@ -676,20 +681,9 @@ void StateSet::setGlobalDefaults()
 
     setRenderBinToInherit();
 
+    setMode(GL_DEPTH_TEST, StateAttribute::ON);
 
-    setMode(GL_DEPTH_TEST,StateAttribute::ON);
     setAttributeAndModes(new BlendFunc,StateAttribute::OFF);
-
-    #if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-
-        // setAttributeAndModes(new AlphaFunc,StateAttribute::OFF);
-
-        Material *material       = new Material;
-        material->setColorMode(Material::AMBIENT_AND_DIFFUSE);
-        setAttributeAndModes(material,StateAttribute::ON);
-
-    #endif
-
 
     OSG_INFO<<"void StateSet::setGlobalDefaults()"<<std::endl;
 

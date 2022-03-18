@@ -50,9 +50,6 @@ TextBase::TextBase():
     _lineCount(0),
     _glyphNormalized(false)
 {
-    setUseDisplayList(false);
-    setSupportsDisplayList(false);
-
     initArraysAndBuffers();
 }
 

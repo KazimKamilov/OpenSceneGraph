@@ -40,9 +40,6 @@ void GeometryCostEstimator::setDefaults()
     _primtiveSetCompileCost.set(min_time, 1.0/transfer_bandwidth, 256); // min time 1/10th of millisecond, min size 256
     _arrayDrawCost.set(min_time, 1.0/gpu_bandwidth, 256); // min time 1/10th of millisecond, min size 256;
     _primtiveSetDrawCost.set(min_time, 1.0/gpu_bandwidth, 256); // min time 1/10th of millisecond, min size 256;
-
-    _displayListCompileConstant = 0.0;
-    _displayListCompileFactor = 10.0;
 }
 
 void GeometryCostEstimator::calibrate(osg::RenderInfo& /*renderInfo*/)
@@ -51,11 +48,9 @@ void GeometryCostEstimator::calibrate(osg::RenderInfo& /*renderInfo*/)
 
 CostPair GeometryCostEstimator::estimateCompileCost(const osg::Geometry* geometry) const
 {
-
     bool usesVBO = geometry->getUseVertexBufferObjects();
-    bool usesDL = !usesVBO && geometry->getUseDisplayList() && geometry->getSupportsDisplayList();
 
-    if (usesVBO || usesDL)
+    if (usesVBO || !usesVBO)
     {
         CostPair cost;
         if (geometry->getVertexArray()) { cost.first += _arrayCompileCost(geometry->getVertexArray()->getTotalDataSize()); }
@@ -78,9 +73,9 @@ CostPair GeometryCostEstimator::estimateCompileCost(const osg::Geometry* geometr
             if (drawElements) { cost.first += _primtiveSetCompileCost(drawElements->getTotalDataSize()); }
         }
 
-        if (usesDL)
+        if (!usesVBO)
         {
-            cost.first = _displayListCompileConstant + _displayListCompileFactor * cost.first ;
+            cost.first = cost.first ;
         }
 
         return cost;

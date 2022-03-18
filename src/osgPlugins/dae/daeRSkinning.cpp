@@ -333,7 +333,6 @@ void daeReader::processSkin(domSkin* pDomSkin, domNode* skeletonRoot, osgAnimati
             pOsgRigGeometry->copyFrom(*pOsgGeometry);
             old2newGeometryMap.insert(GeometryRigGeometryMap::value_type(pOriginalGeometry, pOsgRigGeometry));
             pOsgRigGeometry->setDataVariance(osg::Object::DYNAMIC);
-            pOsgRigGeometry->setUseDisplayList( false );
             pOsgRigGeode->addDrawable(pOsgRigGeometry);
         }
         else

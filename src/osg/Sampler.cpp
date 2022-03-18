@@ -180,7 +180,7 @@ void Sampler::compileGLObjects(State& state) const
                 wr = Texture::CLAMP;
         }
 
-        #if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE) || defined(OSG_GL3_AVAILABLE)
+        #if defined(OSG_GLES2_AVAILABLE) || defined(OSG_GL3_AVAILABLE)
             if (ws == Texture::CLAMP) ws = Texture::CLAMP_TO_EDGE;
             if (wt == Texture::CLAMP) wt = Texture::CLAMP_TO_EDGE;
             if (wr == Texture::CLAMP) wr = Texture::CLAMP_TO_EDGE;

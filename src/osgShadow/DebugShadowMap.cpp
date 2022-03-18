@@ -314,8 +314,6 @@ void DebugShadowMap::ViewData::setDebugPolytope
             if( !pg._geometry[i].valid() ) {
                 pg._geometry[i] = new osg::Geometry;
                 pg._geometry[i]->setDataVariance( osg::Object::DYNAMIC );
-                pg._geometry[i]->setUseDisplayList( false );
-                pg._geometry[i]->setSupportsDisplayList( false );
             }
 
             if( _geode[i].valid() && !_geode[i]->containsDrawable( pg._geometry[i].get() ) )

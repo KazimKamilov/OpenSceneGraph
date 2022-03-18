@@ -29,7 +29,7 @@ using namespace osgText;
 using namespace std;
 
 // GL_ALPHA and GL_LUMINANCE_ALPHA are deprecated in GL3/GL4 core profile, use GL_RED & GL_RB in this case.
-#if defined(OSG_GL3_AVAILABLE) && !defined(OSG_GL2_AVAILABLE) && !defined(OSG_GL1_AVAILABLE)
+#if defined(OSG_GL3_AVAILABLE)
 #define OSGTEXT_GLYPH_ALPHA_FORMAT GL_RED
 #define OSGTEXT_GLYPH_ALPHA_INTERNALFORMAT GL_R8
 #define OSGTEXT_GLYPH_SDF_FORMAT GL_RG

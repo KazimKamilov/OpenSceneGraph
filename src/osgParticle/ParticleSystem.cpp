@@ -57,9 +57,6 @@ osgParticle::ParticleSystem::ParticleSystem()
     _visibilityDistance(-1.0),
     _estimatedMaxNumOfParticles(0)
 {
-    // we don't support display lists because particle systems
-    // are dynamic, and they always changes between frames
-    setSupportsDisplayList(false);
 }
 
 osgParticle::ParticleSystem::ParticleSystem(const ParticleSystem& copy, const osg::CopyOp& copyop)
@@ -472,7 +469,7 @@ void osgParticle::ParticleSystem::drawImplementation(osg::RenderInfo& renderInfo
     }
 
     // set up depth mask for first rendering pass
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
     glPushAttrib(GL_DEPTH_BUFFER_BIT);
 #endif
 
@@ -481,7 +478,7 @@ void osgParticle::ParticleSystem::drawImplementation(osg::RenderInfo& renderInfo
     ad.dispatchArrays(state);
     ad.dispatchPrimitives();
 
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
     // restore depth mask settings
     glPopAttrib();
 #endif
@@ -490,14 +487,14 @@ void osgParticle::ParticleSystem::drawImplementation(osg::RenderInfo& renderInfo
     if (_doublepass)
     {
         // set up color mask for second rendering pass
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
         glPushAttrib(GL_COLOR_BUFFER_BIT);
 #endif
         glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
         ad.dispatchPrimitives();
 
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
         // restore color mask settings
         glPopAttrib();
 #endif
@@ -553,7 +550,7 @@ void osgParticle::ParticleSystem::setDefaultAttributesUsingShaders(const std::st
     osg::PointSprite *sprite = new osg::PointSprite;
     stateset->setTextureAttributeAndModes(texture_unit, sprite, osg::StateAttribute::ON);
 
-    #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+    #if !defined(OSG_GLES2_AVAILABLE)
         stateset->setMode(GL_VERTEX_PROGRAM_POINT_SIZE, osg::StateAttribute::ON);
     #else
         OSG_NOTICE<<"Warning: ParticleSystem::setDefaultAttributesUsingShaders(..) not fully implemented."<<std::endl;

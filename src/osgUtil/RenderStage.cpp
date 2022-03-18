@@ -517,7 +517,7 @@ void RenderStage::runCameraSetUp(osg::RenderInfo& renderInfo)
             // and before call to glCheckFramebufferStatus
             if ( !colorAttached )
             {
-            #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+            #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
                 setDrawBuffer( GL_NONE, true );
                 state.glDrawBuffer( GL_NONE );
             #endif
@@ -808,7 +808,7 @@ void RenderStage::copyTexture(osg::RenderInfo& renderInfo)
 
     if ( _readBufferApplyMask )
     {
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE)
             glReadBuffer(_readBuffer);
         #endif
     }
@@ -909,7 +909,7 @@ void RenderStage::drawInner(osg::RenderInfo& renderInfo,RenderLeaf*& previous, b
 
     if (!using_multiple_render_targets)
     {
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
 
             if( getDrawBufferApplyMask() )
                 state.glDrawBuffer(_drawBuffer);
@@ -995,7 +995,7 @@ void RenderStage::drawInner(osg::RenderInfo& renderInfo,RenderLeaf*& previous, b
                 blitMask, GL_NEAREST);
         }
 
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
         if (needToBlitColorBuffers)
         {
             for (FrameBufferObject::AttachmentMap::const_iterator
@@ -1044,7 +1044,7 @@ void RenderStage::drawInner(osg::RenderInfo& renderInfo,RenderLeaf*& previous, b
         {
             if (read_fbo) SubFunc::applyReadFBO(apply_read_fbo, read_fbo, state);
 
-            #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+            #if !defined(OSG_GLES2_AVAILABLE)
 
                 if (using_multiple_render_targets)
                 {
@@ -1352,7 +1352,7 @@ void RenderStage::drawImplementation(osg::RenderInfo& renderInfo,RenderLeaf*& pr
 
         if (_clearMask & GL_DEPTH_BUFFER_BIT)
         {
-            #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+            #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
                 glClearDepth( _clearDepth);
             #else
                 glClearDepthf( _clearDepth);
@@ -1369,7 +1369,7 @@ void RenderStage::drawImplementation(osg::RenderInfo& renderInfo,RenderLeaf*& pr
             state.haveAppliedAttribute( osg::StateAttribute::STENCIL );
         }
 
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
             if (_clearMask & GL_ACCUM_BUFFER_BIT)
             {
                 glClearAccum( _clearAccum[0], _clearAccum[1], _clearAccum[2], _clearAccum[3]);
@@ -1381,11 +1381,6 @@ void RenderStage::drawImplementation(osg::RenderInfo& renderInfo,RenderLeaf*& pr
 
     #ifdef USE_SCISSOR_TEST
         glDisable( GL_SCISSOR_TEST );
-    #endif
-
-    #ifdef OSG_GL_MATRICES_AVAILABLE
-        glMatrixMode( GL_MODELVIEW );
-        glLoadIdentity();
     #endif
 
     // apply the positional state.

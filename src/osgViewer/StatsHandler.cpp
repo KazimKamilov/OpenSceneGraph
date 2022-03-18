@@ -786,7 +786,6 @@ osg::Geometry* StatsHandler::createBackgroundRectangle(const osg::Vec3& pos, con
 
     osg::Geometry* geometry = new osg::Geometry;
 
-    geometry->setUseDisplayList(false);
     geometry->setStateSet(ss);
 
     osg::Vec3Array* vertices = new osg::Vec3Array;
@@ -841,7 +840,6 @@ protected:
         Graph(const osg::Vec3& pos, float width, float height, osg::Stats* viewerStats, osg::Stats* stats,
               const osg::Vec4& color, float max, const std::string& nameBegin, const std::string& nameEnd = "")
         {
-            setUseDisplayList(false);
             setDataVariance(osg::Object::DYNAMIC);
 
             osg::ref_ptr<osg::BufferObject> vbo = new osg::VertexBufferObject;
@@ -965,7 +963,6 @@ osg::Geometry* StatsHandler::createGeometry(const osg::Vec3& pos, float height, 
 {
     osg::Geometry* geometry = new osg::Geometry;
 
-    geometry->setUseDisplayList(false);
     geometry->setDataVariance(osg::Object::DYNAMIC);
 
     osg::Vec3Array* vertices = new osg::Vec3Array;
@@ -1132,7 +1129,6 @@ osg::Geometry* StatsHandler::createFrameMarkers(const osg::Vec3& pos, float heig
 {
     osg::Geometry* geometry = new osg::Geometry;
 
-    geometry->setUseDisplayList(false);
     geometry->setDataVariance(osg::Object::DYNAMIC);
 
     osg::Vec3Array* vertices = new osg::Vec3Array;
@@ -1158,7 +1154,6 @@ osg::Geometry* StatsHandler::createTick(const osg::Vec3& pos, float height, cons
 {
     osg::Geometry* geometry = new osg::Geometry;
 
-    geometry->setUseDisplayList(false);
     geometry->setDataVariance(osg::Object::DYNAMIC);
 
     osg::Vec3Array* vertices = new osg::Vec3Array;
@@ -1191,9 +1186,6 @@ void StatsHandler::setUpScene(osgViewer::ViewerBase* viewer)
     stateset->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
     stateset->setMode(GL_BLEND,osg::StateAttribute::ON);
     stateset->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
-#ifdef OSG_GL1_AVAILABLE
-    stateset->setAttribute(new osg::PolygonMode(), osg::StateAttribute::PROTECTED);
-#endif
 
     // collect all the relevant cameras
     ViewerBase::Cameras validCameras;

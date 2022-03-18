@@ -67,7 +67,7 @@ void DrawElementsIndirectUInt::draw(State& state, bool /*useVertexBufferObjects*
     state.bindDrawIndirectBufferObject(dibo);
 
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif
@@ -126,7 +126,7 @@ void DrawElementsIndirectUByte::draw(State& state, bool /*useVertexBufferObjects
     state.bindDrawIndirectBufferObject(dibo);
 
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif
@@ -183,7 +183,7 @@ void DrawElementsIndirectUShort::draw(State& state, bool /*useVertexBufferObject
     state.bindDrawIndirectBufferObject(dibo);
 
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif
@@ -295,7 +295,7 @@ void MultiDrawElementsIndirectUByte::draw(State& state, bool /*useVertexBufferOb
 
     state.bindDrawIndirectBufferObject(dibo);
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif
@@ -352,7 +352,7 @@ void MultiDrawElementsIndirectUShort::draw(State& state, bool /*useVertexBufferO
     state.bindDrawIndirectBufferObject(dibo);
 
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif
@@ -406,7 +406,7 @@ void MultiDrawElementsIndirectUInt::draw(State& state, bool /*useVertexBufferObj
     GLBufferObject* dibo = _indirectCommandArray->getBufferObject()->getOrCreateGLBufferObject( state.getContextID() );
     state.bindDrawIndirectBufferObject(dibo);
     GLenum mode = _mode;
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     if (mode==GL_POLYGON) mode = GL_TRIANGLE_FAN;
     if (mode==GL_QUAD_STRIP) mode = GL_TRIANGLE_STRIP;
 #endif

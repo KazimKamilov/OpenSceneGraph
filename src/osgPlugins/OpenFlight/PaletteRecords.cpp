@@ -30,7 +30,7 @@
 #include "AttrData.h"
 #include "RecordInputStream.h"
 
-#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+#if defined(OSG_GLES2_AVAILABLE)
     #define GL_RGB5                     0x8050
     #define GL_RGBA4                    0x8056
     #define GL_RGBA8                    0x8058

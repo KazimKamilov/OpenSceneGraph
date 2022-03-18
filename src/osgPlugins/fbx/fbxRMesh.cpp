@@ -1138,7 +1138,6 @@ osgDB::ReaderWriter::ReadResult OsgFbxReader::readMesh(
             old2newGeometryMap.insert(GeometryRigGeometryMap::value_type(
                 pGeometry, pRig));
             pRig->setDataVariance(osg::Object::DYNAMIC);
-            pRig->setUseDisplayList( false );
             pGeode->setDrawable(i, pRig);
 
             pRig->setInfluenceMap(new osgAnimation::VertexInfluenceMap);

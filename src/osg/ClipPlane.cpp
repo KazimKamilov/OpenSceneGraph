@@ -43,10 +43,5 @@ unsigned int ClipPlane::getClipPlaneNum() const
 
 void ClipPlane::apply(State&) const
 {
-#if defined(OSG_GL_FIXED_FUNCTION_AVAILABLE) && !defined(OSG_GLES1_AVAILABLE)
-    glClipPlane((GLenum)(GL_CLIP_PLANE0+_clipPlaneNum),_clipPlane.ptr());
-#else
-    OSG_NOTICE<<"Warning: ClipPlane::apply(State&) - not supported."<<std::endl;
-#endif
 }
 

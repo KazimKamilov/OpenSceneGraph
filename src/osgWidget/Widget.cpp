@@ -50,7 +50,6 @@ _minHeight (0.0f) {
     // until an Image is set at some later point.
     std::fill(texs->begin(), texs->end(), osg::Vec2(0.0f, 0.0f));
 
-    setUseDisplayList(false);
     setDataVariance(osg::Object::DYNAMIC);
     setVertexArray(new PointArray(4));
     setColorArray(new ColorArray(4), osg::Array::BIND_PER_VERTEX);

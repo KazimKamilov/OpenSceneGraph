@@ -599,20 +599,6 @@ Program::PerContextProgram* Program::getPCP(State& state) const
     return pcp;
 }
 
-
-bool Program::isFixedFunction() const
-{
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-    // A Program object having no attached Shaders is a special case:
-    // it indicates that programmable shading is to be disabled,
-    // and thus use GL 1.x "fixed functionality" rendering.
-    return _shaderList.empty();
-#else
-    return false;
-#endif
-}
-
-
 bool Program::getGlProgramInfoLog(unsigned int contextID, std::string& log) const
 {
     if (contextID<_pcpList.size()) return (_pcpList[ contextID ])->getGlProgramInfoLog( log );

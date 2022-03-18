@@ -195,7 +195,12 @@ class OSG_EXPORT Drawable : public Node
         /** Get the const Shape of the const Drawable.*/
         inline const Shape* getShape() const { return _shape.get(); }
 
+        /** When set to true, ignore the setUseDisplayList() settings, and hints to the drawImplementation
+            method to use OpenGL vertex buffer objects for rendering.*/
+        virtual void setUseVertexBufferObjects(bool flag);
 
+        /** Return whether OpenGL vertex buffer objects should be used when supported by OpenGL driver.*/
+        inline bool getUseVertexBufferObjects() const { return _useVertexBufferObjects; }
 
         /** Set the drawable so that it can or cannot be used in conjunction with OpenGL
           * display lists.  When set to true, calls to Drawable::setUseDisplayList,
@@ -204,30 +209,18 @@ class OSG_EXPORT Drawable : public Node
           * is typically used to guard against the switching on of display lists
           * on objects with dynamic internal data such as continuous Level of Detail
           * algorithms.*/
-        void setSupportsDisplayList(bool flag);
+        void setSupportsDisplayList(bool flag) {}
 
         /** Get whether display lists are supported for this drawable instance.*/
-        inline bool getSupportsDisplayList() const { return _supportsDisplayList; }
-
+        inline bool getSupportsDisplayList() const { return false; }
 
         /** When set to true, force the draw method to use OpenGL Display List for rendering.
             If false, rendering directly.  If the display list has not been compiled
             already, the next call to draw will automatically create the display list.*/
-        void setUseDisplayList(bool flag);
+        void setUseDisplayList(bool flag) {}
 
         /** Return whether OpenGL display lists are being used for rendering.*/
-        inline bool getUseDisplayList() const { return _useDisplayList; }
-
-        /** Return OpenGL display list for specified contextID. */
-        inline GLuint& getDisplayList(unsigned int contextID) const { return _globjList[contextID]; }
-
-        /** When set to true, ignore the setUseDisplayList() settings, and hints to the drawImplementation
-            method to use OpenGL vertex buffer objects for rendering.*/
-        virtual void setUseVertexBufferObjects(bool flag);
-
-        /** Return whether OpenGL vertex buffer objects should be used when supported by OpenGL driver.*/
-        inline bool getUseVertexBufferObjects() const { return _useVertexBufferObjects; }
-
+        inline bool getUseDisplayList() const { return false; }
 
         /** Set whether to use a local VertexArrayObject for this Drawable.*/
         void setUseVertexArrayObject(bool flag);
@@ -235,23 +228,12 @@ class OSG_EXPORT Drawable : public Node
         /** Return whether to use a local VertexArrayObject for this Drawable.*/
         bool getUseVertexArrayObject() const { return _useVertexArrayObject; }
 
-#ifdef OSG_USE_DEPRECATED_API
-        /** Deprecated, use dirtyGLObjects() instead. */
-        inline void dirtyDisplayList()
-        {
-            dirtyGLObjects();
-        }
-#endif
-
         /** Force a recompile on next draw() of any OpenGL objects associated with this geoset.*/
         virtual void dirtyGLObjects();
-
 
         /** Return the estimated size of GLObjects (display lists/vertex buffer objects) that are associated with this drawable.
           * This size is used a hint for reuse of deleted display lists/vertex buffer objects.  */
         virtual unsigned int getGLObjectSizeHint() const { return 0; }
-
-
 
         /** Draw OpenGL primitives.
           * If the \c Drawable has \c _useDisplayList set to \c true, then use
@@ -378,24 +360,6 @@ class OSG_EXPORT Drawable : public Node
           * and drawImplementation(RenderInfo&) handling the actual drawing itself.
           * renderInfo : The osg::RenderInfo object that encapsulates the current rendering information including the osg::State OpenGL state for the current graphics context. */
         virtual void drawImplementation(RenderInfo& /*renderInfo*/) const {}
-
-
-        /** Return a OpenGL display list handle a newly generated or reused from display list cache. */
-        static GLuint generateDisplayList(unsigned int contextID, unsigned int sizeHint = 0);
-
-        /** Use deleteDisplayList instead of glDeleteList to allow
-          * OpenGL display list to be cached until they can be deleted
-          * by the OpenGL context in which they were created, specified
-          * by contextID.*/
-        static void deleteDisplayList(unsigned int contextID,GLuint globj, unsigned int sizeHint = 0);
-
-        /** Set the minimum number of display lists to retain in the deleted display list cache. */
-        static void setMinimumNumberOfDisplayListsToRetainInCache(unsigned int minimum);
-
-        /** Get the minimum number of display lists to retain in the deleted display list cache. */
-        static unsigned int getMinimumNumberOfDisplayListsToRetainInCache();
-
-
 
         typedef unsigned int AttributeType;
 
@@ -530,8 +494,6 @@ class OSG_EXPORT Drawable : public Node
 
         ref_ptr<Shape>          _shape;
 
-        bool                    _supportsDisplayList;
-        bool                    _useDisplayList;
         bool                    _supportsVertexBufferObjects;
         bool                    _useVertexBufferObjects;
         bool                    _useVertexArrayObject;
@@ -582,33 +544,6 @@ inline void Drawable::draw(RenderInfo& renderInfo) const
         state.bindVertexArrayObject(state.getCurrentVertexArrayState());
     }
 
-
-#ifdef OSG_GL_DISPLAYLISTS_AVAILABLE
-    if (!state.useVertexBufferObject(_supportsVertexBufferObjects && _useVertexBufferObjects) && _useDisplayList)
-    {
-        // get the contextID (user defined ID of 0 upwards) for the
-        // current OpenGL context.
-        unsigned int contextID = renderInfo.getContextID();
-
-        // get the globj for the current contextID.
-        GLuint& globj = _globjList[contextID];
-
-        if( globj == 0 )
-        {
-            // compile the display list
-            globj = generateDisplayList(contextID, getGLObjectSizeHint());
-            glNewList( globj, GL_COMPILE );
-
-            drawInner(renderInfo);
-
-            glEndList();
-        }
-
-        // call the display list
-        glCallList( globj);
-    }
-    else
-#endif
     {
         // if state.previousVertexArrayState() is different than currentVertexArrayState bind current
 

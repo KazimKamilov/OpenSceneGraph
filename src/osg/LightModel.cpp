@@ -35,55 +35,6 @@ LightModel::~LightModel()
 {
 }
 
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-
-// need to define if gl.h version < 1.2.
-#ifndef GL_LIGHT_MODEL_COLOR_CONTROL
-#define GL_LIGHT_MODEL_COLOR_CONTROL 0x81F8
-#endif
-
-#ifndef GL_SINGLE_COLOR
-#define GL_SINGLE_COLOR 0x81F9
-#endif
-
-#ifndef GL_SEPARATE_SPECULAR_COLOR
-#define GL_SEPARATE_SPECULAR_COLOR 0x81FA
-#endif
-
-void LightModel::apply(State& state) const
-{
-
-    #ifdef OSG_GLES1_AVAILABLE
-    #define glLightModeli glLightModelx
-    #endif
-
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,_ambient.ptr());
-
-    if (state.get<GLExtensions>()->glVersion>=1.2)
-    {
-        if (_colorControl==SEPARATE_SPECULAR_COLOR)
-        {
-            glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR);
-        }
-        else
-        {
-            glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SINGLE_COLOR);
-        }
-    }
-
-    #ifndef OSG_GLES1_AVAILABLE
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,_localViewer);
-    #endif
-
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,_twoSided);
-}
-
-#else
-
 void LightModel::apply(State&) const
 {
-    OSG_NOTICE<<"Warning: LightModel::apply(State&) - not supported."<<std::endl;
 }
-
-#endif
-

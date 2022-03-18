@@ -45,8 +45,9 @@ REGISTER_OBJECT_WRAPPER( Drawable,
     ADD_OBJECT_SERIALIZER( ComputeBoundingBoxCallback,
                            osg::Drawable::ComputeBoundingBoxCallback, NULL );  // _computeBoundCallback
     ADD_OBJECT_SERIALIZER( Shape, osg::Shape, NULL );  // _shape
-    ADD_BOOL_SERIALIZER( SupportsDisplayList, true );  // _supportsDisplayList
-    ADD_BOOL_SERIALIZER( UseDisplayList, true );  // _useDisplayList
+    ADD_BOOL_SERIALIZER(SupportsDisplayList, true);  // _supportsDisplayList
+    ADD_BOOL_SERIALIZER(UseDisplayList, true);  // _useDisplayList
+
     ADD_BOOL_SERIALIZER( UseVertexBufferObjects, false );  // _useVertexBufferObjects
     ADD_OBJECT_SERIALIZER( UpdateCallback, osg::Callback, NULL );  // _updateCallback
     ADD_OBJECT_SERIALIZER( EventCallback, osg::Callback, NULL );  // _eventCallback

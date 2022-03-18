@@ -29,21 +29,4 @@ TexMat::~TexMat()
 
 void TexMat::apply(State& state) const
 {
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-    glMatrixMode( GL_TEXTURE );
-    glLoadMatrix(_matrix.ptr());
-
-    if (_scaleByTextureRectangleSize)
-    {
-        const osg::TextureRectangle* tex = dynamic_cast<const osg::TextureRectangle*>(state.getLastAppliedTextureAttribute(state.getActiveTextureUnit(), osg::StateAttribute::TEXTURE));
-        if (tex)
-        {
-            glScalef(tex->getTextureWidth(),tex->getTextureHeight(),1.0f);
-        }
-    }
-
-    glMatrixMode( GL_MODELVIEW );
-#else
-    OSG_NOTICE<<"Warning: TexMat::apply(State&) - not supported."<<std::endl;
-#endif
 }

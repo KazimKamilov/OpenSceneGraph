@@ -280,8 +280,6 @@ public:
 QueryGeometry::QueryGeometry( const std::string& oqnName )
   : _oqnName( oqnName )
 {
-    // TBD check to see if we can have this on.
-    setUseDisplayList( false );
 }
 
 QueryGeometry::~QueryGeometry()

@@ -158,8 +158,6 @@ osg::Geode* Keystone::createKeystoneDistortionMesh()
     osg::ref_ptr<osg::Geometry> geometry = new osg::Geometry;
     geode->addDrawable(geometry.get());
 
-    geometry->setUseDisplayList(false);
-
     osg::ref_ptr<KeystoneUpdateCallback> kuc = new KeystoneUpdateCallback(this);
     geometry->setUpdateCallback(kuc.get());
 
@@ -222,8 +220,6 @@ osg::Node* Keystone::createGrid()
 
     osg::ref_ptr<osg::Geometry> geometry = new osg::Geometry;
     geode->addDrawable(geometry.get());
-
-    geometry->setUseDisplayList(false);
 
     osg::ref_ptr<KeystoneUpdateCallback> kuc = new KeystoneUpdateCallback(this);
     geometry->setUpdateCallback(kuc.get());

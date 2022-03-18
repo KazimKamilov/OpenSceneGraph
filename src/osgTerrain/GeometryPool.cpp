@@ -776,7 +776,6 @@ osg::StateSet* GeometryPool::getRootStateSetForTerrain(Terrain* /*terrain*/)
 //
 SharedGeometry::SharedGeometry()
 {
-    setSupportsDisplayList(false);
     _supportsVertexBufferObjects = true;
 }
 
@@ -789,7 +788,6 @@ SharedGeometry::SharedGeometry(const SharedGeometry& rhs,const osg::CopyOp& copy
     _drawElements(rhs._drawElements),
     _vertexToHeightFieldMapping(rhs._vertexToHeightFieldMapping)
 {
-//    setSupportsDisplayList(false);
 }
 
 SharedGeometry::~SharedGeometry()
@@ -1018,7 +1016,6 @@ void SharedGeometry::accept(osg::PrimitiveIndexFunctor& pif) const
 //
 HeightFieldDrawable::HeightFieldDrawable()
 {
-    setSupportsDisplayList(false);
 }
 
 HeightFieldDrawable::HeightFieldDrawable(const HeightFieldDrawable& rhs,const osg::CopyOp& copyop):
@@ -1027,7 +1024,6 @@ HeightFieldDrawable::HeightFieldDrawable(const HeightFieldDrawable& rhs,const os
     _geometry(rhs._geometry),
     _vertices(rhs._vertices)
 {
-    setSupportsDisplayList(false);
 }
 
 HeightFieldDrawable::~HeightFieldDrawable()

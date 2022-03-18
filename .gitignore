@@ -20,6 +20,9 @@ src/osgQt/__
 lib/
 bin/
 
+build/
+3rd_party/
+
 *.pc
 *.conf
 CMakeCache.txt

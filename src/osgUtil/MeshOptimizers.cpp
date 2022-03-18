@@ -836,7 +836,7 @@ void VertexCacheVisitor::doVertexOptimization(Geometry& geom,
             unsigned vertIdx = triToAdd->verts[i];
             Vertex* vert = &vertices[vertIdx];
             vertDrawList.push_back(vertIdx);
-            std::remove(vertTriListStore.begin() + vert->triList,
+            (void)std::remove(vertTriListStore.begin() + vert->triList,
                    vertTriListStore.begin() + vert->triList
                    + vert->numActiveTris,
                    triToAddIdx);

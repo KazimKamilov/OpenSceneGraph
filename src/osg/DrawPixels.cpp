@@ -16,9 +16,6 @@ using namespace osg;
 
 DrawPixels::DrawPixels()
 {
-    // turn off display lists right now, just in case we want to modify the projection matrix along the way.
-    setSupportsDisplayList(false);
-
     _position.set(0.0f,0.0f,0.0f);
 
     _useSubImage = false;
@@ -90,31 +87,5 @@ BoundingBox DrawPixels::computeBoundingBox() const
 
 void DrawPixels::drawImplementation(RenderInfo&) const
 {
-#ifdef OSG_GL1_AVAILABLE
-    glRasterPos3f(_position.x(),_position.y(),_position.z());
-
-    if (_useSubImage)
-    {
-        const GLvoid* pixels = _image->data(_offsetX,_offsetY);
-        glPixelStorei(GL_UNPACK_ALIGNMENT,_image->getPacking());
-        glPixelStorei(GL_UNPACK_ROW_LENGTH,_image->s());
-        glDrawPixels(_width,_height,
-                     (GLenum)_image->getPixelFormat(),
-                     (GLenum)_image->getDataType(),
-                     pixels);
-        glPixelStorei(GL_UNPACK_ROW_LENGTH,0);
-    }
-    else
-    {
-        glPixelStorei(GL_UNPACK_ALIGNMENT,_image->getPacking());
-        glPixelStorei(GL_UNPACK_ROW_LENGTH,0);
-        glDrawPixels(_image->s(), _image->t(),
-                     (GLenum)_image->getPixelFormat(),
-                     (GLenum)_image->getDataType(),
-                     _image->data() );
-    }
-#else
-    OSG_NOTICE<<"Warning: DrawPixels::drawImplementation(RenderInfo&) - not supported."<<std::endl;
-#endif
 }
 

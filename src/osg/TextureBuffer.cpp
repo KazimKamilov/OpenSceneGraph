@@ -133,7 +133,7 @@ void TextureBuffer::setImage(Image* image)
 
 void TextureBuffer::apply(State& state) const
 {
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE)
     const unsigned int contextID = state.getContextID();
 
     TextureObject* textureObject = getTextureObject(contextID);

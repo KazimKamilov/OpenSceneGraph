@@ -70,8 +70,6 @@ protected:
     ClampedLinearCostFunction1D _arrayDrawCost;
     ClampedLinearCostFunction1D _primtiveSetDrawCost;
 
-    double _displayListCompileConstant;
-    double _displayListCompileFactor;
 };
 
 class OSG_EXPORT TextureCostEstimator : public osg::Referenced

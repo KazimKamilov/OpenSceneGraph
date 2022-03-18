@@ -45,8 +45,6 @@ osg::Geometry* PanoramicSphericalDisplay::createParoramicSphericalDisplayDistort
     // create the quad to visualize.
     osg::Geometry* geometry = new osg::Geometry();
 
-    geometry->setSupportsDisplayList(false);
-
     osg::Vec3 xAxis(widthVector);
     float width = widthVector.length();
     xAxis /= width;

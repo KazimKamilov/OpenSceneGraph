@@ -225,7 +225,6 @@ void VolumeScene::traverse(osg::NodeVisitor& nv)
         viewData->_geometry = new osg::Geometry;
         geode->addDrawable(viewData->_geometry.get());
 
-        viewData->_geometry->setUseDisplayList(false);
         viewData->_geometry->setUseVertexBufferObjects(false);
 
         viewData->_vertices = new osg::Vec3Array(4);

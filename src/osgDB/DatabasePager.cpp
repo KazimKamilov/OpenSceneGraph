@@ -244,7 +244,7 @@ class DatabasePager::FindCompileableGLObjectsVisitor : public osgUtil::StateToCo
 {
 public:
     FindCompileableGLObjectsVisitor(const DatabasePager* pager, osg::Object* markerObject):
-            osgUtil::StateToCompile(osgUtil::GLObjectsVisitor::COMPILE_DISPLAY_LISTS|osgUtil::GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES, markerObject),
+            osgUtil::StateToCompile(osgUtil::GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES, markerObject),
             _pager(pager),
             _changeAutoUnRef(false), _valueAutoUnRef(false),
             _changeAnisotropy(false), _valueAnisotropy(1.0)
@@ -262,18 +262,11 @@ public:
                 // do nothing, leave settings as they came in from loaded database.
                 // OSG_NOTICE<<"DO_NOT_MODIFY_DRAWABLE_SETTINGS"<<std::endl;
                 break;
-            case DatabasePager::USE_DISPLAY_LISTS:
-                _mode = _mode | osgUtil::GLObjectsVisitor::SWITCH_ON_DISPLAY_LISTS;
-                _mode = _mode | osgUtil::GLObjectsVisitor::SWITCH_OFF_VERTEX_BUFFER_OBJECTS;
-                _mode = _mode & ~osgUtil::GLObjectsVisitor::SWITCH_ON_VERTEX_BUFFER_OBJECTS;
-                break;
             case DatabasePager::USE_VERTEX_BUFFER_OBJECTS:
                 _mode = _mode | osgUtil::GLObjectsVisitor::SWITCH_ON_VERTEX_BUFFER_OBJECTS;
                 break;
             case DatabasePager::USE_VERTEX_ARRAYS:
-                _mode = _mode & ~osgUtil::GLObjectsVisitor::SWITCH_ON_DISPLAY_LISTS;
                 _mode = _mode & ~osgUtil::GLObjectsVisitor::SWITCH_ON_VERTEX_BUFFER_OBJECTS;
-                _mode = _mode | osgUtil::GLObjectsVisitor::SWITCH_OFF_DISPLAY_LISTS;
                 _mode = _mode | osgUtil::GLObjectsVisitor::SWITCH_OFF_VERTEX_BUFFER_OBJECTS;
                 break;
         }
@@ -994,10 +987,6 @@ DatabasePager::DatabasePager()
         {
             _drawablePolicy = DO_NOT_MODIFY_DRAWABLE_SETTINGS;
         }
-        else if (strcmp(str,"DisplayList")==0 || strcmp(str,"DL")==0)
-        {
-            _drawablePolicy = USE_DISPLAY_LISTS;
-        }
         else if (strcmp(str,"VBO")==0)
         {
             _drawablePolicy = USE_VERTEX_BUFFER_OBJECTS;
@@ -1138,14 +1127,6 @@ DatabasePager::DatabasePager(const DatabasePager& rhs)
     setProcessorAffinity(rhs.getProcessorAffinity());
 
     _activePagedLODList = rhs._activePagedLODList->clone();
-
-#if 1
-    // need to set the display list manager to be able to reuse display lists
-    osg::Drawable::setMinimumNumberOfDisplayListsToRetainInCache(100);
-#else
-    // need to set the display list manager to be able to reuse display lists
-    osg::Drawable::setMinimumNumberOfDisplayListsToRetainInCache(0);
-#endif
 
     // initialize the stats variables
     resetStats();

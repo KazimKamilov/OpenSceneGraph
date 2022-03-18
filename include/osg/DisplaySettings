@@ -316,8 +316,9 @@ class OSG_EXPORT DisplaySettings : public osg::Referenced
             SHADER_NONE,
             SHADER_GL2,
             SHADER_GLES2,
+            SHADER_GLES3,
             SHADER_GL3,
-            SHADER_GLES3
+            SHADER_GL4
         };
 
         /** set the ShaderHint to tells shader generating cdoes  version to create.

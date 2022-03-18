@@ -36,8 +36,7 @@ void CompileSlideCallback::operator()(const osg::Camera & camera) const
 
     if (_frameNumber!=fs->getFrameNumber()) return;
 
-    osgUtil::GLObjectsVisitor globjVisitor(osgUtil::GLObjectsVisitor::COMPILE_DISPLAY_LISTS|
-                                  osgUtil::GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES);
+    osgUtil::GLObjectsVisitor globjVisitor(osgUtil::GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES);
 
     globjVisitor.setTraversalMode(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN);
 

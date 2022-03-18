@@ -128,7 +128,7 @@ bool osg::isGLExtensionOrVersionSupported(unsigned int contextID, const char *ex
 
             // get the extension list from OpenGL.
             GLint numExt = 0;
-            #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+            #if !defined(OSG_GLES2_AVAILABLE)
             if( osg::getGLVersionNumber() >= 3.0 )
             {
                 // OpenGL 3.0 adds the concept of indexed strings and
@@ -179,7 +179,7 @@ bool osg::isGLExtensionOrVersionSupported(unsigned int contextID, const char *ex
                 if (*startOfWord!=0) extensionSet.insert(std::string(startOfWord));
             }
 
-    #if defined(_WIN32) && (defined(OSG_GL1_AVAILABLE) || defined(OSG_GL2_AVAILABLE) || defined(OSG_GL3_AVAILABLE))
+    #if defined(_WIN32) && (defined(OSG_GL3_AVAILABLE))
 
             // add WGL extensions to the list
 
@@ -336,14 +336,10 @@ OSG_INIT_SINGLETON_PROXY(GLExtensionDisableStringInitializationProxy, osg::getGL
     {
         // OSG_NOTICE<<"osg::getGLExtensionFuncPtr("<<funcName<<")"<<std::endl;
     #if defined(__ANDROID__)
-        #if defined(OSG_GLES1_AVAILABLE)
-            static void *handle = dlopen("libGLESv1_CM.so", RTLD_NOW);
-        #elif defined(OSG_GLES2_AVAILABLE)
+        #if defined(OSG_GLES2_AVAILABLE)
             static void *handle = dlopen("libGLESv2.so", RTLD_NOW);
         #elif defined(OSG_GLES3_AVAILABLE)
             static void *handle = dlopen("libGLESv3.so", RTLD_NOW);
-        #elif defined(OSG_GL1_AVAILABLE)
-            static void *handle = dlopen("libGL.so", RTLD_NOW);
         #endif
         return dlsym(handle, funcName);
 
@@ -351,9 +347,6 @@ OSG_INIT_SINGLETON_PROXY(GLExtensionDisableStringInitializationProxy, osg::getGL
 
         #if defined(OSG_GLES2_AVAILABLE) || defined(OSG_GLES3_AVAILABLE)
             static HMODULE hmodule = GetModuleHandle(TEXT("libGLESv2.dll"));
-            return convertPointerType<void*, PROC>(GetProcAddress(hmodule, funcName));
-        #elif defined(OSG_GLES1_AVAILABLE)
-            static HMODULE hmodule = GetModuleHandleA(TEXT("libgles_cm.dll"));
             return convertPointerType<void*, PROC>(GetProcAddress(hmodule, funcName));
         #else
             return convertPointerType<void*, PROC>(wglGetProcAddress(funcName));
@@ -893,7 +886,6 @@ GLExtensions::GLExtensions(unsigned int in_contextID):
 
     isTextureBorderClampSupported = validContext &&
                                     (OSG_GL3_FEATURES ||
-                                     ((OSG_GL1_FEATURES || OSG_GL2_FEATURES) && isGLExtensionOrVersionSupported(contextID,"GL_ARB_texture_border_clamp", 1.3f)) ||
                                      ((OSG_GLES2_FEATURES || OSG_GLES3_FEATURES) && isGLExtensionSupported(contextID,"GL_EXT_texture_border_clamp")));
 
     isGenerateMipMapSupported = validContext && (builtInSupport || isGLExtensionOrVersionSupported(contextID,"GL_SGIS_generate_mipmap", 1.4f));
@@ -1280,11 +1272,7 @@ GLExtensions::GLExtensions(unsigned int in_contextID):
         if (osg::getGLVersionNumber() >= 2.0 || osg::isGLExtensionSupported(contextID, "GL_ARB_vertex_shader") || OSG_GLES2_FEATURES || OSG_GLES3_FEATURES || OSG_GL3_FEATURES)
         {
             glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,&glMaxTextureUnits);
-            #ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-                glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTextureCoords);
-            #else
-                glMaxTextureCoords = glMaxTextureUnits;
-            #endif
+            glMaxTextureCoords = glMaxTextureUnits;
         }
         #ifdef GL_MAX_TEXTURE_UNITS
         else if ( osg::getGLVersionNumber() >= 1.3 ||

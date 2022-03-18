@@ -50,35 +50,6 @@ namespace
 
         void apply(osg::State& state) const
         {
-        #ifdef OSG_GL_MATRICES_AVAILABLE
-
-            glMatrixMode(GL_TEXTURE);
-
-            if (_active) {
-                osg::Matrix M = state.getInitialViewMatrix();
-                M(3, 0) = 0; M(3, 1) = 0; M(3, 2) = 0;
-                M(3, 3) = 1; M(0, 3) = 0; M(1, 3) = 0;
-                M(2, 3) = 0;
-
-                osg::Vec4 lightvec;
-                glGetLightfv(GL_LIGHT0+_lightnum, GL_POSITION, lightvec._v);
-
-                osg::Vec3 eye_light_ref = osg::Vec3(0, 0, 1) * M;
-
-                osg::Matrix LM = osg::Matrix::rotate(
-                    osg::Vec3(lightvec.x(), lightvec.y(), lightvec.z()),
-                    eye_light_ref);
-
-                glLoadMatrix((LM * osg::Matrix::inverse(M)).ptr());
-
-            } else {
-                glLoadIdentity();
-            }
-
-            glMatrixMode(GL_MODELVIEW);
-        #else
-            OSG_NOTICE<<"Warning: osgFX::SpecualHighlights unable to set texture matrix."<<std::endl;
-        #endif
         }
 
     private:

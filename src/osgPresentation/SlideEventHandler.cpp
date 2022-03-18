@@ -1600,8 +1600,7 @@ void SlideEventHandler::compileSlide(unsigned int slideNum)
 
 void SlideEventHandler::releaseSlide(unsigned int slideNum)
 {
-    osgUtil::GLObjectsVisitor globjVisitor(osgUtil::GLObjectsVisitor::RELEASE_DISPLAY_LISTS|
-                                           osgUtil::GLObjectsVisitor::RELEASE_STATE_ATTRIBUTES);
+    osgUtil::GLObjectsVisitor globjVisitor(osgUtil::GLObjectsVisitor::RELEASE_STATE_ATTRIBUTES);
     globjVisitor.setNodeMaskOverride(0xffffffff);
 
     _presentationSwitch->getChild(slideNum)->accept(globjVisitor);

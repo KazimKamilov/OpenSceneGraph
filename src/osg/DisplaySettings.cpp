@@ -257,8 +257,6 @@ void DisplaySettings::setDefaults()
     setShaderHint(SHADER_GLES2);
 #elif defined(OSG_GL3_AVAILABLE)
     setShaderHint(SHADER_GL3);
-#elif defined(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE)
-    setShaderHint(SHADER_NONE);
 #else
     setShaderHint(SHADER_GL2);
 #endif
@@ -1147,6 +1145,13 @@ void DisplaySettings::setShaderHint(ShaderHint hint, bool setShaderValues)
             setValue("OSG_VARYING_IN", "in");
             setValue("OSG_VARYING_OUT", "out");
             OSG_INFO<<"DisplaySettings::SHADER_GL3"<<std::endl;
+            break;
+        case(SHADER_GL4):
+            setValue("OSG_GLSL_VERSION", "#version 460");
+            setValue("OSG_PRECISION_FLOAT", "");
+            setValue("OSG_VARYING_IN", "in");
+            setValue("OSG_VARYING_OUT", "out");
+            OSG_INFO << "DisplaySettings::SHADER_GL3" << std::endl;
             break;
         case(SHADER_GL2) :
             setValue("OSG_GLSL_VERSION", "");

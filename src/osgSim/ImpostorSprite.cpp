@@ -39,9 +39,6 @@ ImpostorSprite::ImpostorSprite():
     _s(0),
     _t(0)
 {
-    // don't use display list since we will be updating the geometry.
-    setUseDisplayList(false);
-
     init();
 }
 
@@ -56,8 +53,6 @@ ImpostorSprite::ImpostorSprite(const ImpostorSprite&):
     _s(0),
     _t(0)
 {
-    setUseDisplayList(false);
-
     init();
 }
 

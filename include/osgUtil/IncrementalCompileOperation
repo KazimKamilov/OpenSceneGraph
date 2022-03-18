@@ -251,7 +251,7 @@ class OSGUTIL_EXPORT IncrementalCompileOperation : public osg::GraphicsOperation
                 _subgraphToCompile(subgraphToCompile) {}
 
             void buildCompileMap(ContextSet& contexts, StateToCompile& stateToCompile);
-            void buildCompileMap(ContextSet& contexts, GLObjectsVisitor::Mode mode=GLObjectsVisitor::COMPILE_DISPLAY_LISTS|GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES);
+            void buildCompileMap(ContextSet& contexts, GLObjectsVisitor::Mode mode=GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES);
 
             bool compile(CompileInfo& compileInfo);
 

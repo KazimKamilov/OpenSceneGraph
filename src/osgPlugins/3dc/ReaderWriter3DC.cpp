@@ -147,7 +147,6 @@ class ReaderWriter3DC : public osgDB::ReaderWriter
                         if (vertices->size()>=targetNumVertices)
                         {
                             // finishing setting up the current geometry and add it to the geode.
-                            geometry->setUseDisplayList(true);
                             geometry->setUseVertexBufferObjects(true);
                             geometry->setVertexArray(vertices);
                             geometry->setNormalArray(normals, osg::Array::BIND_PER_VERTEX);
@@ -176,8 +175,6 @@ class ReaderWriter3DC : public osgDB::ReaderWriter
                 }
             }
 
-
-            geometry->setUseDisplayList(true);
             geometry->setUseVertexBufferObjects(true);
             geometry->setVertexArray(vertices);
             geometry->setNormalArray(normals, osg::Array::BIND_PER_VERTEX);

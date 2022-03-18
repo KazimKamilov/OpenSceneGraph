@@ -31,10 +31,5 @@ LogicOp::~LogicOp()
 
 void LogicOp::apply(State&) const
 {
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-    glLogicOp(static_cast<GLenum>(_opcode));
-#else
-    OSG_NOTICE<<"Warning: LogicOp::apply(State&) - not supported."<<std::endl;
-#endif
 }
 

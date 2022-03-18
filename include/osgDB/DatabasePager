@@ -208,7 +208,6 @@ class OSGDB_EXPORT DatabasePager : public osg::NodeVisitor::DatabaseRequestHandl
         enum DrawablePolicy
         {
             DO_NOT_MODIFY_DRAWABLE_SETTINGS,
-            USE_DISPLAY_LISTS,
             USE_VERTEX_BUFFER_OBJECTS,
             USE_VERTEX_ARRAYS
         };

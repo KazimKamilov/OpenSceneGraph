@@ -488,7 +488,7 @@ void WindowCaptureCallback::setCaptureOperation(ScreenCaptureHandler::CaptureOpe
 
 void WindowCaptureCallback::operator () (osg::RenderInfo& renderInfo) const
 {
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE)
     glReadBuffer(_readBuffer);
 #endif
 

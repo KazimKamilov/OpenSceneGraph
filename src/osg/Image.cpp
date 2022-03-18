@@ -1197,7 +1197,7 @@ unsigned int Image::getTotalSizeInBytesIncludingMipmaps() const
 void Image::setRowLength(int length)
 {
     _rowLength = length;
-    #if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE)
+    #if defined(OSG_GLES2_AVAILABLE)
     if (length > 0)
     {
         OSG_WARN << "Image::setRowLength is not supported on this platform, ignoring" << std::endl;
@@ -1341,7 +1341,7 @@ void Image::readPixels(int x,int y,int width,int height,
 
 void Image::readImageFromCurrentTexture(unsigned int contextID, bool copyMipMapsIfAvailable, GLenum type, unsigned int face)
 {
-#if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+#if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
     // OSG_NOTICE<<"Image::readImageFromCurrentTexture()"<<std::endl;
 
     const osg::GLExtensions* extensions = osg::GLExtensions::Get(contextID,true);

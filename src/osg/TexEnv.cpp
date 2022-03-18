@@ -77,29 +77,6 @@ void TexEnv::configureUniformNames()
 
 void TexEnv::apply(State& state) const
 {
-#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
-    if (state.getUseStateAttributeFixedFunction())
-    {
-        if (_mode==ADD)
-        {
-            static bool isTexEnvAddSupported = isGLExtensionSupported(state.getContextID(),"GL_ARB_texture_env_add");
-            if (isTexEnvAddSupported)
-                glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, ADD);
-            else // fallback on OpenGL default.
-                glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, MODULATE);
-        }
-        else
-        {
-            glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, _mode);
-            if (_mode==TexEnv::BLEND)
-            {
-                glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, _color->getValue().ptr());
-            }
-        }
-    }
-
-    if (state.getUseStateAttributeShaders())
-#endif
     {
         if (_mode==BLEND) state.applyShaderCompositionUniform(_color.get());
 

@@ -21,19 +21,6 @@
 namespace osg
 {
 
-#if defined(OSG_GLES1_AVAILABLE)
-inline void GL_APIENTRY glColor4ubv(const GLubyte* c) { glColor4ub(c[0], c[1], c[2], c[3]); }
-inline void GL_APIENTRY glColor3fv(const GLfloat* c) { glColor4f(c[0], c[1], c[2], 1.0f); }
-inline void GL_APIENTRY glColor4fv(const GLfloat* c) { glColor4f(c[0], c[1], c[2], c[3]); }
-inline void GL_APIENTRY glColor3dv(const GLdouble* c) { glColor4f(c[0], c[1], c[2], 1.0f); }
-inline void GL_APIENTRY glColor4dv(const GLdouble* c) { glColor4f(c[0], c[1], c[2], c[3]); }
-
-inline void GL_APIENTRY glNormal3bv(const GLbyte* n) { const float div = 1.0f/128.0f; glNormal3f(float(n[0])*div, float(n[1])*div, float(n[3])*div); }
-inline void GL_APIENTRY glNormal3sv(const GLshort* n) { const float div = 1.0f/32768.0f; glNormal3f(float(n[0])*div, float(n[1])*div, float(n[3])*div); }
-inline void GL_APIENTRY glNormal3fv(const GLfloat* n) { glNormal3f(n[0], n[1], n[3]); }
-inline void GL_APIENTRY glNormal3dv(const GLdouble* n) { glNormal3f(n[0], n[1], n[3]); }
-#endif
-
 template<typename T>
 class TemplateAttributeDispatch : public AttributeDispatch
 {
@@ -183,26 +170,6 @@ void AttributeDispatchers::init()
     _colorDispatchers = new AttributeDispatchMap();
     _secondaryColorDispatchers  = new AttributeDispatchMap();
     _fogCoordDispatchers = new AttributeDispatchMap();
-
-
-#ifdef OSG_GL_VERTEX_FUNCS_AVAILABLE
-    GLExtensions* extensions = _state->get<GLExtensions>();
-
-    _normalDispatchers->assign<GLbyte>(Array::Vec3bArrayType, glNormal3bv, 3);
-    _normalDispatchers->assign<GLshort>(Array::Vec3sArrayType, glNormal3sv, 3);
-    _normalDispatchers->assign<GLfloat>(Array::Vec3ArrayType, glNormal3fv, 3);
-    _normalDispatchers->assign<GLdouble>(Array::Vec3dArrayType, glNormal3dv, 3);
-
-    _colorDispatchers->assign<GLubyte>(Array::Vec4ubArrayType, glColor4ubv, 4);
-    _colorDispatchers->assign<GLfloat>(Array::Vec3ArrayType, glColor3fv, 3);
-    _colorDispatchers->assign<GLfloat>(Array::Vec4ArrayType, glColor4fv, 4);
-    _colorDispatchers->assign<GLdouble>(Array::Vec3dArrayType, glColor3dv, 3);
-    _colorDispatchers->assign<GLdouble>(Array::Vec4dArrayType, glColor4dv, 4);
-
-    _secondaryColorDispatchers->assign<GLfloat>(Array::Vec3ArrayType, extensions->glSecondaryColor3fv, 3);
-
-    _fogCoordDispatchers->assign<GLfloat>(Array::FloatArrayType, extensions->glFogCoordfv, 1);
-#endif
 
     // pre allocate.
     _activeDispatchList.resize(5);

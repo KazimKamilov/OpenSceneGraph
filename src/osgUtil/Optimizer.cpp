@@ -365,7 +365,7 @@ void Optimizer::optimize(osg::Node* node, unsigned int options)
     if (options & BUFFER_OBJECT_SETTINGS)
     {
         OSG_INFO<<"Optimizer::optimize() doing BUFFER_OBJECT_SETTINGS"<<std::endl;
-        BufferObjectVisitor bov(true, true, true, true, true, false);
+        BufferObjectVisitor bov(true, true, true, true);
         node->accept(bov);
     }
 
@@ -4540,9 +4540,4 @@ void Optimizer::BufferObjectVisitor::apply(osg::Geometry& geometry)
         geometry.setUseVertexArrayObjects(_valueVertexArrayObject);
     }
 #endif
-    if (_changeDisplayList)
-    {
-        OSG_NOTICE<<"geometry.setUseDisplayList("<<_valueDisplayList<<")"<<std::endl;
-        geometry.setUseDisplayList(_valueDisplayList);
-    }
 }

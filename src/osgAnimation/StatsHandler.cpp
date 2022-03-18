@@ -49,7 +49,6 @@ osg::Geometry* createBackgroundRectangle(const osg::Vec3& pos, const float width
     osg::StateSet *ss = new osg::StateSet;
     osg::Geometry* geometry = new osg::Geometry;
 
-    geometry->setUseDisplayList(false);
     geometry->setStateSet(ss);
 
     osg::Vec3Array* vertices = new osg::Vec3Array;
@@ -119,7 +118,6 @@ struct StatsGraph : public osg::MatrixTransform
               const osg::Vec4& color, float max, const std::string& nameBegin, const std::string& nameEnd = "")
         {
             setDataVariance(osg::Object::DYNAMIC);
-            setUseDisplayList(false);
 
             setVertexArray(new osg::Vec3Array);
             getVertexArray()->setDataVariance(osg::Object::DYNAMIC);

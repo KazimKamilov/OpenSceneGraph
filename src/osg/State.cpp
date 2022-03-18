@@ -80,17 +80,10 @@ State::State():
     _modelView = _identity;
     _modelViewCache = new osg::RefMatrix;
 
-    #if !defined(OSG_GL_FIXED_FUNCTION_AVAILABLE)
-        _useStateAttributeShaders = true;
-        _useStateAttributeFixedFunction = false;
-        _useModelViewAndProjectionUniforms = true;
-        _useVertexAttributeAliasing = true;
-    #else
-        _useStateAttributeShaders = false;
-        _useStateAttributeFixedFunction = true;
-        _useModelViewAndProjectionUniforms = false;
-        _useVertexAttributeAliasing = false;
-    #endif
+    _useStateAttributeShaders = true;
+    _useStateAttributeFixedFunction = false;
+    _useModelViewAndProjectionUniforms = true;
+    _useVertexAttributeAliasing = true;
 
     _modelViewMatrixUniform = new Uniform(Uniform::FLOAT_MAT4,"osg_ModelViewMatrix");
     _projectionMatrixUniform = new Uniform(Uniform::FLOAT_MAT4,"osg_ProjectionMatrix");
@@ -335,11 +328,7 @@ void State::initializeExtensionProcs()
     {
         bool pointSpriteModeValid = _glExtensions->isPointSpriteModeSupported;
 
-    #if defined( OSG_GLES1_AVAILABLE ) //point sprites don't exist on es 2.0
-        setModeValidity(GL_POINT_SPRITE_OES, pointSpriteModeValid);
-    #else
         setModeValidity(GL_POINT_SPRITE_ARB, pointSpriteModeValid);
-    #endif
     }
 
 
@@ -605,7 +594,7 @@ void State::glDrawBuffer(GLenum buffer)
 {
     if (_drawBuffer!=buffer)
     {
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
         ::glDrawBuffer(buffer);
         #endif
         _drawBuffer=buffer;
@@ -616,7 +605,7 @@ void State::glReadBuffer(GLenum buffer)
 {
     if (_readBuffer!=buffer)
     {
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GLES3_AVAILABLE)
         ::glReadBuffer(buffer);
         #endif
         _readBuffer=buffer;
@@ -1610,11 +1599,6 @@ void State::applyProjectionMatrix(const osg::RefMatrix* matrix)
             if (_projectionMatrixUniform.valid()) _projectionMatrixUniform->set(*_projection);
             updateModelViewAndProjectionMatrixUniforms();
         }
-#ifdef OSG_GL_MATRICES_AVAILABLE
-        glMatrixMode( GL_PROJECTION );
-            glLoadMatrix(_projection->ptr());
-        glMatrixMode( GL_MODELVIEW );
-#endif
     }
 }
 
@@ -1625,10 +1609,6 @@ void State::loadModelViewMatrix()
         if (_modelViewMatrixUniform.valid()) _modelViewMatrixUniform->set(*_modelView);
         updateModelViewAndProjectionMatrixUniforms();
     }
-
-#ifdef OSG_GL_MATRICES_AVAILABLE
-    glLoadMatrix(_modelView->ptr());
-#endif
 }
 
 void State::applyModelViewMatrix(const osg::RefMatrix* matrix)

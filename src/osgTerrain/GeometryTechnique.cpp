@@ -1242,8 +1242,6 @@ void GeometryTechnique::generateGeometry(BufferData& buffer, Locator* masterLoca
         }
     }
 
-
-    geometry->setUseDisplayList(false);
     geometry->setUseVertexBufferObjects(true);
 
 #if 0

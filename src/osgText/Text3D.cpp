@@ -537,7 +537,7 @@ void Text3D::drawImplementation(osg::RenderInfo& renderInfo) const
 
         if (!_decorationPrimitives.empty())
         {
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
             osg::State::ApplyModeProxy applyLightingMode(state, GL_LIGHTING, false);
             osg::State::ApplyTextureModeProxy applyTextureMode(state, 0, GL_TEXTURE_2D, false);
         #endif
@@ -555,7 +555,7 @@ void Text3D::drawImplementation(osg::RenderInfo& renderInfo) const
     {
         state.Color(_color.r(),_color.g(),_color.b(),_color.a());
 
-        #if !defined(OSG_GLES1_AVAILABLE) && !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+        #if !defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
         osg::State::ApplyModeProxy applyNormalizeMode(state, GL_NORMALIZE, true);
         osg::State::ApplyModeProxy applyLightingMode(state, GL_LIGHTING, true);
         #endif

@@ -67,10 +67,10 @@ void Drawable::write(DataOutputStream* out)
     }
 
     // Write support display list.
-    out->writeBool(getSupportsDisplayList());
+    out->writeBool(false);
 
     // Write use display list.
-    out->writeBool(getUseDisplayList());
+    out->writeBool(false);
 
     // Write use display list.
     out->writeBool(getUseVertexBufferObjects());
@@ -124,10 +124,10 @@ void Drawable::read(DataInputStream* in)
         }
 
         // Read support display list
-        setSupportsDisplayList(in->readBool());
+        (void)in->readBool();
 
         // Read use display list
-        setUseDisplayList(in->readBool());
+        (void)in->readBool();
 
         // Read use display list
         setUseVertexBufferObjects(in->readBool());
